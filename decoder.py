@@ -100,15 +100,16 @@ def probabilities(values):
     return [w / total for w in weights]
 
 
-def distribution(logps, counts, allowed, strength, calibrate=True):
+def distribution(logps, counts, allowed, strength, calibrate=True, flatten=False):
     # One visit can offset even sharp model preferences. Finite penalties keep
     # every grammar-admissible action reachable.
     scale = 1 + (max(logps) - min(logps)) / log(2) if calibrate else 1.
-    values = [logps[h-1] - strength * scale * log1p(counts[h]) for h in allowed]
+    base = [0., 0., 0.] if flatten else logps
+    values = [base[h-1] - strength * scale * log1p(counts[h]) for h in allowed]
     return probabilities(values)
 
 
-def sample(mask, seed, method, scores, budget, strength=1., explain=False, calibrate=True):
+def sample(mask, seed, method, scores, budget, strength=1., explain=False, calibrate=True, flatten=False):
     columns = mask.count("1")
     # Stable per-(mask,seed) streams; methods share the same base uniforms.
     rng = random.Random((seed << 10) + int(mask, 2))
@@ -128,7 +129,7 @@ def sample(mask, seed, method, scores, budget, strength=1., explain=False, calib
                 allowed = [h for h in allowed if remaining <= targets[t] - sum(prefix) - h <= 3 * remaining]
             logps = [0., 0., 0.] if method == "uniform" else scores(mask, prefix)
             feedback = strength if method in ("marginal", "prefix") else 0.
-            probs = distribution(logps, counts, allowed, feedback, calibrate)
+            probs = distribution(logps, counts, allowed, feedback, calibrate, flatten)
             height = rng.choices(allowed, weights=probs)[0]
             if explain:
                 decisions.append(dict(prefix=list(prefix), raw=logps, counts=counts, allowed=allowed,

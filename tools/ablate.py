@@ -27,12 +27,15 @@ def main():
         masks = [m for m in data["examples"] if m.count("1") == k]
         budget = data["levels"][str(k)]["n"]
         per_seed = {}
-        for name, scorer, calibrated in [("prefix",model,True),("fixed_scale",model,False),("flat_logits",flat,True)]:
+        controls = [("prefix", model, True, False), ("fixed_scale", model, False, False),
+                    ("flat_logits", flat, True, False), ("flat_with_model_scale", model, True, True)]
+        for name, scorer, calibrated, flatten in controls:
             seed_means = []
             for seed in manifest["seeds"]:
                 scores = []
                 for mask in masks:
-                    proposals, _ = sample(mask,seed,"prefix",scorer,budget,manifest["strength"],calibrate=calibrated)
+                    proposals, _ = sample(mask, seed, "prefix", scorer, budget, manifest["strength"],
+                                          calibrate=calibrated, flatten=flatten)
                     scores.append(metrics(mask, proposals)[2])
                 seed_means.append(statistics.fmean(scores))
             per_seed[name] = seed_means

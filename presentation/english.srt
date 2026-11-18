@@ -1,0 +1,512 @@
+1
+00:00:01,165 --> 00:00:03,342
+Look at this structure from directly above.
+
+2
+00:00:03,787 --> 00:00:05,755
+Three squares are occupied.
+
+3
+00:00:06,200 --> 00:00:08,032
+Can you tell which stack is tallest?
+
+4
+00:00:08,477 --> 00:00:12,856
+You could guess, but the top view would look exactly the same if the heights
+changed.
+
+5
+00:00:13,301 --> 00:00:19,007
+A language model can therefore give a perfectly defensible answer and still miss
+most of the possibilities.
+
+6
+00:00:19,452 --> 00:00:27,274
+Our project asks how many different valid structures a frozen language model can
+discover when it has a fixed number of attempts.
+
+7
+00:00:27,719 --> 00:00:34,164
+We test that question on the voxel reconstruction task in HypoSpace, introduced
+by Chen and colleagues.
+
+8
+00:00:36,092 --> 00:00:37,777
+Start with a three by three grid.
+
+9
+00:00:38,222 --> 00:00:41,838
+A colored square means at least one cube lies in that column.
+
+10
+00:00:42,283 --> 00:00:44,287
+An empty square means zero.
+
+11
+00:00:44,732 --> 00:00:47,623
+Gravity gives us a convenient description.
+
+12
+00:00:48,068 --> 00:00:52,901
+Every occupied column is a solid stack, with no floating blocks.
+
+13
+00:00:53,346 --> 00:00:55,904
+Read the occupied positions in row order.
+
+14
+00:00:56,349 --> 00:01:01,588
+Each one can have height one, two, or three, independently of the others.
+
+15
+00:01:02,033 --> 00:01:07,617
+Multiplying those choices gives twenty-seven distinct structures for this
+observation.
+
+16
+00:01:08,062 --> 00:01:10,227
+Each has exactly the same footprint.
+
+17
+00:01:12,155 --> 00:01:17,603
+Suppose four draws give the three stacks shown here, with the first answer
+occurring twice.
+
+18
+00:01:18,048 --> 00:01:20,163
+Every proposed structure is legal.
+
+19
+00:01:20,608 --> 00:01:22,650
+Validity is four out of four.
+
+20
+00:01:23,095 --> 00:01:29,257
+Uniqueness counts three distinct proposals out of four attempts, so it reaches
+seventy-five percent.
+
+21
+00:01:29,702 --> 00:01:31,989
+Recovery uses a different denominator.
+
+22
+00:01:32,434 --> 00:01:38,178
+Three distinct valid structures cover only three of the twenty-seven possible
+structures.
+
+23
+00:01:38,623 --> 00:01:41,550
+This example shows why we track recovery through time.
+
+24
+00:01:41,995 --> 00:01:47,000
+The second copy consumes a draw and leaves the set of discoveries unchanged.
+
+25
+00:01:48,928 --> 00:01:54,217
+Imagine choosing among all twenty-seven answers uniformly and independently.
+
+26
+00:01:54,662 --> 00:02:01,279
+One particular answer is missed with probability twenty-six over twenty-seven on a
+single draw.
+
+27
+00:02:01,724 --> 00:02:05,499
+Raise that probability to the twenty-seventh power to miss it every time.
+
+28
+00:02:05,944 --> 00:02:11,368
+Subtracting from one gives the expected fraction recovered, about sixty-four
+percent.
+
+29
+00:02:11,813 --> 00:02:15,281
+Even this generous reference leaves many answers unseen.
+
+30
+00:02:15,726 --> 00:02:23,338
+If the model concentrates probability on a few familiar patterns, independent
+draws revisit those patterns even more often.
+
+31
+00:02:23,783 --> 00:02:28,814
+The second speaker will show how earlier proposals can change the next draw.
+
+32
+00:02:31,193 --> 00:02:35,260
+Our decoding experiment gives every method the same compact interface.
+
+33
+00:02:35,716 --> 00:02:40,084
+The model sees the observation and proposes one height for each occupied cell.
+
+34
+00:02:40,540 --> 00:02:49,066
+For example, two, one, three represents a two-cube stack in the first cell, a single
+cube in the second, and three cubes in the last.
+
+35
+00:02:49,522 --> 00:02:52,971
+Each chosen digit comes from the legal height alphabet.
+
+36
+00:02:53,427 --> 00:02:59,491
+Expanding these digits into layers gives a complete structure that can be scored
+against the observation.
+
+37
+00:02:59,946 --> 00:03:05,553
+This representation makes it possible to study repeated answers while holding
+output formatting fixed.
+
+38
+00:03:07,528 --> 00:03:09,617
+Consider three earlier proposals.
+
+39
+00:03:10,072 --> 00:03:12,957
+Two of them ended in one after the prefix two, one.
+
+40
+00:03:13,412 --> 00:03:16,383
+The third ended in three after the same prefix.
+
+41
+00:03:16,839 --> 00:03:23,433
+If the next proposal starts with two, one, those counts tell us exactly which endings
+have already attracted probability.
+
+42
+00:03:23,889 --> 00:03:29,046
+A single count per position would mix this history together with proposals that
+started differently.
+
+43
+00:03:29,502 --> 00:03:32,202
+The prefix table keeps those cases separate.
+
+44
+00:03:32,657 --> 00:03:37,128
+It is small enough to inspect, and it changes as the model draws more structures.
+
+45
+00:03:39,103 --> 00:03:43,677
+At a decision point, we subtract a penalty from each model log probability.
+
+46
+00:03:44,132 --> 00:03:47,844
+The penalty grows as the logarithm of one plus the visit count.
+
+47
+00:03:48,300 --> 00:03:53,068
+Its scale depends on the gap between the model's largest and smallest height
+scores.
+
+48
+00:03:53,524 --> 00:03:56,866
+That lets one previous visit counter a sharp local preference.
+
+49
+00:03:57,322 --> 00:04:03,640
+Normalizing the adjusted scores gives a new probability distribution over the three
+possible heights.
+
+50
+00:04:04,096 --> 00:04:09,797
+The decoder then samples, advances one position, and eventually records the
+finished proposal.
+
+51
+00:04:10,252 --> 00:04:12,885
+Drawing a duplicate still spends one attempt.
+
+52
+00:04:13,340 --> 00:04:17,030
+Only the proposals seen for this observation enter its history.
+
+53
+00:04:17,486 --> 00:04:20,742
+The strategy never needs a catalog of all the answers.
+
+54
+00:04:22,717 --> 00:04:26,558
+The model-only baseline measures what the shared interface can do on its own.
+
+55
+00:04:27,014 --> 00:04:33,989
+Complexity stratification builds on the paper's idea of distributing attention across
+structures of different sizes.
+
+56
+00:04:34,445 --> 00:04:37,367
+For stacks, size is the total number of cubes.
+
+57
+00:04:37,822 --> 00:04:41,026
+A position-only count provides a closer comparison.
+
+58
+00:04:41,482 --> 00:04:47,370
+It can encourage every height at every position while still overlooking
+combinations between positions.
+
+59
+00:04:47,825 --> 00:04:52,448
+The conditional version remembers which earlier choices led to the current
+position.
+
+60
+00:04:52,903 --> 00:04:58,785
+Comparing these alternatives helps identify what information in the history actually
+helps.
+
+61
+00:05:00,968 --> 00:05:03,513
+Our third section describes the paired experiment.
+
+62
+00:05:03,882 --> 00:05:10,974
+We used Qwen two point five, three billion parameters on a server with an RTX
+forty eighty Super graphics card.
+
+63
+00:05:11,343 --> 00:05:18,905
+Across three difficulty levels we evaluated all one hundred twenty-nine possible
+footprints with one, two, or three occupied cells.
+
+64
+00:05:19,275 --> 00:05:24,670
+The hardest level uses 84 three-column layouts and 20 decoding seeds per layout
+in the hardest setting.
+
+65
+00:05:25,039 --> 00:05:32,110
+Every method receives the same observation, the same alphabet, and the same
+budget of twenty-seven proposals in a hard-level run.
+
+66
+00:05:32,480 --> 00:05:35,842
+Each proposal corresponds to a complete set of column heights.
+
+67
+00:05:36,212 --> 00:05:40,687
+When a sampled structure repeats, it remains in the trace and counts towards that
+total.
+
+68
+00:05:41,057 --> 00:05:45,165
+This lets us compare coverage at each draw as well as after the final draw.
+
+69
+00:05:46,766 --> 00:05:54,420
+At the end of twenty-seven draws, unmodified model sampling recovered 19.7
+percent of the valid structures on average.
+
+70
+00:05:54,790 --> 00:05:57,927
+Prefix feedback reached 79.7 percent.
+
+71
+00:05:58,296 --> 00:06:03,589
+That is a paired difference of 59.9 percentage points across the same layouts and
+seeds.
+
+72
+00:06:03,959 --> 00:06:11,960
+The seed-panel bootstrap interval for that difference runs from 59.7 to 60.2 points,
+conditional on these layouts.
+
+73
+00:06:12,330 --> 00:06:14,373
+All methods produce legal vectors here.
+
+74
+00:06:14,743 --> 00:06:19,893
+The change in recovery therefore comes from finding different structures within
+the fixed number of attempts.
+
+75
+00:06:21,495 --> 00:06:24,244
+The horizontal axis counts complete proposals.
+
+76
+00:06:24,613 --> 00:06:29,395
+The vertical axis shows the mean fraction of valid structures recovered by that
+point.
+
+77
+00:06:29,765 --> 00:06:37,214
+After nine draws, the baseline has recovered 13.0 percent and the prefix method
+has recovered 33.0 percent.
+
+78
+00:06:37,584 --> 00:06:43,337
+At eighteen draws, the corresponding values are 17.1 and 61.0 percent.
+
+79
+00:06:43,706 --> 00:06:46,986
+A curve starts to flatten when repeats consume more of the new draws.
+
+80
+00:06:47,356 --> 00:06:50,841
+Comparing the curves at the same point keeps the query budget fixed.
+
+81
+00:06:52,442 --> 00:06:56,428
+The marginal-count variant recovers 45.8 percent on this setting.
+
+82
+00:06:56,797 --> 00:07:02,346
+Restricting the counts to the actual path raises recovery to 79.7 percent.
+
+83
+00:07:02,715 --> 00:07:08,438
+That gap measures the value of conditioning the feedback on earlier digits, with
+the model and the strength rule held fixed.
+
+84
+00:07:08,807 --> 00:07:12,220
+The complexity-stratified decoder reaches 44.2 percent.
+
+85
+00:07:12,590 --> 00:07:19,119
+It allocates the exact histogram of total cube counts, although layouts inside a
+single size group can still repeat.
+
+86
+00:07:19,489 --> 00:07:22,217
+The easiest level reverses their order.
+
+87
+00:07:22,587 --> 00:07:29,014
+With one occupied cell, stratification recovers every height, while prefix feedback
+recovers 87.8 percent.
+
+88
+00:07:31,157 --> 00:07:36,409
+In the terminal, the inspect command selects the observation, policy, and draw
+number.
+
+89
+00:07:36,851 --> 00:07:41,748
+This example stops after four proposals and lists every sampled height vector in
+order.
+
+90
+00:07:42,189 --> 00:07:44,337
+The recovery counter is cumulative.
+
+91
+00:07:44,779 --> 00:07:47,244
+A line marked new adds one structure to the set.
+
+92
+00:07:47,685 --> 00:07:50,367
+A repeated vector leaves that counter where it was.
+
+93
+00:07:50,809 --> 00:07:59,817
+For the selected draw, the detailed trace reports the partial prefix, the original log
+probabilities, the visit counts, and the final sampling probabilities.
+
+94
+00:08:00,259 --> 00:08:04,858
+That is enough information to see exactly why a previously frequent digit lost
+weight.
+
+95
+00:08:06,772 --> 00:08:09,214
+The browser replays the archived experiment.
+
+96
+00:08:09,656 --> 00:08:15,625
+Select a footprint to fix the observation, choose a decoder, and follow one
+proposal at a time.
+
+97
+00:08:16,067 --> 00:08:22,796
+The stack diagram turns the numeric heights back into cubes, so you can see what
+each new vector means in three dimensions.
+
+98
+00:08:23,237 --> 00:08:25,515
+Compare the structures with their common footprint.
+
+99
+00:08:25,957 --> 00:08:29,559
+Their appearance from above remains the same even as the heights change.
+
+100
+00:08:30,001 --> 00:08:33,420
+The terminal and the presentation view use the same measured run.
+
+101
+00:08:33,862 --> 00:08:37,341
+The interactive display can run locally from the saved results.
+
+102
+00:08:39,255 --> 00:08:42,270
+An additional ablation changes how we interpret the gain.
+
+103
+00:08:42,712 --> 00:08:49,295
+Give all three heights equal starting scores, while keeping the model's original
+score spread to calibrate the visit penalty.
+
+104
+00:08:49,737 --> 00:08:58,041
+Recovery rises to ninety-four point four percent, above the full prefix policy's
+seventy-nine point seven percent.
+
+105
+00:08:58,483 --> 00:09:03,534
+Flattening both the scores and their spread gives seventy-four point eight percent.
+
+106
+00:09:03,975 --> 00:09:08,781
+On this task, calibration helps, and the model's height preferences can cost
+coverage.
+
+107
+00:09:09,223 --> 00:09:13,908
+Validity is built into the representation, and exact enumeration is possible.
+
+108
+00:09:14,350 --> 00:09:18,125
+Whether these effects transfer to other domains remains an open question.
+
+109
+00:09:20,038 --> 00:09:22,075
+The project connects three pieces.
+
+110
+00:09:22,517 --> 00:09:25,166
+A frozen model supplies local preferences.
+
+111
+00:09:25,608 --> 00:09:29,662
+An online memory records the choices made along each sampled path.
+
+112
+00:09:30,103 --> 00:09:34,705
+A deterministic score turns the resulting sequence into a coverage curve.
+
+113
+00:09:35,147 --> 00:09:43,021
+You can inspect the individual draws, reproduce the comparisons, and replay the
+measurements in the browser using the public repository shown here.
+
+114
+00:09:43,463 --> 00:09:51,896
+In the tested three-column setting, the prefix decoder increased mean recovery by
+59.9 points over the frozen-model sampling baseline.
+
+115
+00:09:52,337 --> 00:09:57,033
+The original benchmark and its authors' implementation are linked in the
+repository.
+
+116
+00:09:57,474 --> 00:09:58,822
+Thank you for watching.

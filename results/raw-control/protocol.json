@@ -1,0 +1,29 @@
+{
+  "upstream_commit": "c69e9318577b34b5b896996571aefd4ba6053f58",
+  "model": "qwen2.5:3b",
+  "options": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": 0,
+    "repeat_penalty": 1.0,
+    "num_predict": 192,
+    "num_ctx": 4096
+  },
+  "mask_sampling_seed": 33550336,
+  "sampling_seed_rule": "mask_sampling_seed + 27 * zero_based_mask_index + zero_based_attempt",
+  "masks": [
+    "001010100",
+    "000110010",
+    "011100000",
+    "011010000",
+    "101001000",
+    "000101100"
+  ],
+  "attempts_per_mask": 27,
+  "max_prior_distinct_parsed_structures": 10,
+  "attempts_per_request": 1,
+  "endpoint_type": "Ollama /api/chat",
+  "model_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+  "quantization": "Q4_K_M",
+  "ollama_version": "0.31.2"
+}

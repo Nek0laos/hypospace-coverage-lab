@@ -1,0 +1,85 @@
+{
+  "masks": [
+    {
+      "mask": "001010100",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 21,
+      "n_recovered_gts": 0,
+      "parse_success_count": 27,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.7777777777777778,
+      "recovery_rate": 0.0
+    },
+    {
+      "mask": "000110010",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 16,
+      "n_recovered_gts": 0,
+      "parse_success_count": 27,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.5925925925925926,
+      "recovery_rate": 0.0
+    },
+    {
+      "mask": "011100000",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 19,
+      "n_recovered_gts": 0,
+      "parse_success_count": 26,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.7037037037037037,
+      "recovery_rate": 0.0
+    },
+    {
+      "mask": "011010000",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 18,
+      "n_recovered_gts": 0,
+      "parse_success_count": 27,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.6666666666666666,
+      "recovery_rate": 0.0
+    },
+    {
+      "mask": "101001000",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 21,
+      "n_recovered_gts": 0,
+      "parse_success_count": 27,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.7777777777777778,
+      "recovery_rate": 0.0
+    },
+    {
+      "mask": "000101100",
+      "n_ground_truths": 27,
+      "n_queries": 27,
+      "n_valid": 0,
+      "n_unique": 15,
+      "n_recovered_gts": 0,
+      "parse_success_count": 27,
+      "valid_rate": 0.0,
+      "novelty_rate": 0.5555555555555556,
+      "recovery_rate": 0.0
+    }
+  ],
+  "attempts": 162,
+  "mean": {
+    "valid_rate": 0.0,
+    "novelty_rate": 0.6790123456790124,
+    "recovery_rate": 0.0
+  },
+  "prompt_tokens": 174145,
+  "completion_tokens": 15586,
+  "responses_at_length_limit": 15
+}

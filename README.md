@@ -2,7 +2,7 @@
 
 At a budget of 27 proposals for 27 legal structures, Qwen2.5-3B recovered **79.66%** of the solution set with prefix-count decoding and **19.73%** with ordinary constrained sampling. Both used the same frozen model, prompt, digit grammar and budget. Results cover all 84 three-column top views of a 3 × 3 grid and 20 paired sampling seeds on an RTX 4080 SUPER.
 
-[Interactive experiment](https://nek0laos.github.io/hypospace-coverage-lab/) · [10-minute presentation](https://github.com/Nek0laos/hypospace-coverage-lab/releases/tag/v1.0) · [HypoSpace paper](https://proceedings.mlr.press/v306/chen26bz.html)
+[Interactive experiment](https://nek0laos.github.io/hypospace-coverage-lab/) · [Watch the 10-minute presentation](https://nek0laos.github.io/hypospace-coverage-lab/talk.html) · [Download the presentation](https://github.com/Nek0laos/hypospace-coverage-lab/releases/tag/v1.0) · [HypoSpace paper](https://proceedings.mlr.press/v306/chen26bz.html)
 
 ## Try the experiment
 
@@ -20,6 +20,7 @@ At the `coverage>` prompt, use `mask 001010100`, `policy prefix`, `goto 12`, `ba
 
 ```sh
 python lab.py inspect --mask 001010100 --method prefix --seed 101 --step 12 --prompt
+python lab.py inspect --mask 001010100 --method flat_with_model_scale --seed 101 --step 12
 ```
 
 **中文速用**　在项目根目录运行 `python lab.py shell` 进入调试终端，输入 `goto 12` 查看第 12 次生成过程中每个高度的概率。运行 `python lab.py serve` 后打开终端显示的网址，即可回放同一批实验。离线演示无需安装模型。
@@ -59,9 +60,15 @@ On three-column views, prefix counts gained **59.93 percentage points** over Qwe
 
 The study measures the coverage of the **model plus decoder**. The specialized grammar supplies validity. The frozen weights receive no training. The experiment covers the voxel task, and claims about the other two HypoSpace domains or other checkpoints require further experiments. The main protocol changes the output format and context relative to the official layer-text runner. The paper’s published model scores use their own generation protocol.
 
-## Reproduce with the model
+### Additional controls
 
 A separate ablation on the same 84 three-column views gave 30.83% recovery when the count multiplier was fixed at one. Setting all model scores to zero and applying the same prefix policy gave 74.83%. The latter also sets the score-spread term to zero. Its 4.83-point gap to the full method measures the joint effect of model preferences and the calibration they induce. These controls are in [the ablation results](results/ablation.json).
+
+Keeping Qwen’s measured score spread to set the penalty, while flattening its preference among heights, raised recovery further to **94.37%** on the three-column task. This control shows that the coverage objective benefits from a strong repeat penalty and that Qwen’s ordering of otherwise legal choices can concentrate the samples. The benchmark’s uniform treatment of all legal structures makes this a favorable setting for flattening.
+
+We also tested the original layer-text prompt with the same Qwen checkpoint, the upstream ten-structure history and scorer, and no retries. Across six preselected three-column masks, 161 of 162 replies parsed and zero reproduced the observed projection. Uniqueness was 67.90%. Fifteen replies reached the 192-token limit. On those same six masks the constrained baseline averaged 25.93% recovery and prefix counts averaged 79.32%. The raw-format run used one seed panel and a different output-token budget. The matched main table above isolates the decoder change. [Raw replies](results/raw-control/responses.jsonl) · [Sampling protocol](results/raw-control/protocol.json) · [Official scores](results/raw-control/summary.json)
+
+## Reproduce with the model
 
 The reference model is Ollama `qwen2.5:3b`, Q4_K_M, manifest digest `357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b`, served by Ollama 0.31.2. The adapter expects Qwen2.5 ChatML and single-token decimal digits. On a machine with Ollama, start its service, then run the following. An existing endpoint can be supplied with `--endpoint`.
 
@@ -99,6 +106,7 @@ git clone https://github.com/CTT-Pavilion/_HypoSpace.git ../_HypoSpace
 git -C ../_HypoSpace checkout c69e9318577b34b5b896996571aefd4ba6053f58
 python -m pip install numpy scipy PyYAML requests networkx
 python tools/verify_upstream.py --upstream ../_HypoSpace --traces results/reference/traces.jsonl.gz --out runs-audit.json
+python tools/raw_control.py --upstream ../_HypoSpace --out results/raw-control --replay
 python tools/ablate.py
 ```
 

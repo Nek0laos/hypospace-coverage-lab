@@ -12,6 +12,7 @@ from experiment import replay, run
 
 ROOT = Path(__file__).resolve().parent
 REFERENCE = ROOT / "results" / "reference"
+DEBUG_POLICIES = (*METHODS, "fixed_scale", "flat_logits", "flat_with_model_scale")
 
 
 def inspect_draw(args):
@@ -26,9 +27,13 @@ def inspect_draw(args):
         raise ValueError(f"Step must be between 1 and {budget}")
     scores = json.loads((args.run/"scores.json").read_text())
     def lookup(mask, prefix):
+        if args.method == "flat_logits":
+            return [0., 0., 0.]
         return scores[mask + "/" + "".join(map(str,prefix))]
     seed = manifest["seeds"][0] if args.seed is None else args.seed
-    draws, decisions = sample(mask, seed, args.method, lookup, budget, manifest["strength"], explain=True)
+    policy = args.method if args.method in METHODS else "prefix"
+    draws, decisions = sample(mask, seed, policy, lookup, budget, manifest["strength"], explain=True,
+                              calibrate=args.method != "fixed_scale", flatten=args.method == "flat_with_model_scale")
     if args.prompt:
         print(prompt(mask, ()))
     print(f"{manifest['model']['name']} | {args.method} | view {mask} | seed {seed}")
@@ -91,11 +96,11 @@ def shell(args):
                 print("goto takes a positive draw number")
 
         def do_policy(self, value):
-            if value in METHODS:
+            if value in DEBUG_POLICIES:
                 args.method = value
                 self.jump(args.step)
             else:
-                print("Policies:", ", ".join(METHODS))
+                print("Policies:", ", ".join(DEBUG_POLICIES))
 
         def do_mask(self, value):
             if value in dataset["examples"]:
@@ -146,7 +151,7 @@ def main():
         if cmd == "inspect":
             p.add_argument("--mask", help="nine row-major footprint bits")
             p.add_argument("--seed", type=int)
-            p.add_argument("--method", choices=METHODS, default="prefix")
+            p.add_argument("--method", choices=DEBUG_POLICIES, default="prefix")
             p.add_argument("--step", type=int)
             p.add_argument("--prompt", action="store_true")
             p.set_defaults(fn=inspect_draw)

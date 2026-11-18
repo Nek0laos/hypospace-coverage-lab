@@ -1,22 +1,195 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f4f3ee"><title>Coverage Lab · HypoSpace 3D</title><link rel="stylesheet" href="style.css"><script defer src="app.js"></script></head>
-<body><header><a class="brand" href="#experiment"><span class="mark" aria-hidden="true">◈</span> Coverage Lab</a>
-<nav aria-label="Main"><a href="#experiment">Experiment</a><a href="#method">Method</a><a href="https://github.com/Nek0laos/hypospace-coverage-lab">Repository ↗</a></nav></header>
-<main><section class="intro" id="experiment"><div><p class="eyebrow">HYPOSPACE &nbsp;/&nbsp; 3D RECONSTRUCTION</p><h1>Hypothesis coverage<span>.</span></h1><p class="lede">How many structures can one model recover from the same top view?</p></div>
-<div class="selector"><label for="level">Occupied columns</label><select id="level" disabled></select></div></section>
-<div id="status" role="status">Loading recorded model outputs…</div><div id="report" hidden>
-<section class="metrics" aria-label="Selected comparison">
-<div><p>Prefix recovery</p><strong id="recovery">—</strong></div><div><p>Model baseline</p><strong id="baseline">—</strong></div><div><p>Recovery gain</p><strong class="accent" id="gain">—</strong></div><div><p>Proposals per run</p><strong id="budget">—</strong></div>
-</section>
-<div class="panels"><section class="panel chart-panel"><div class="panel-head"><div><p class="eyebrow">SAMPLING BUDGET</p><h2>Recovery over draws</h2></div><span class="data-label">Mean over runs</span></div>
-<div class="chart" id="chart"></div><div class="legend" id="legend" aria-label="Curves to display"></div><p class="panel-note" id="interval"></p></section>
-<section class="panel voxel-panel"><div class="panel-head"><div><p class="eyebrow">RECORDED PROPOSALS</p><h2>Structure replay</h2></div><button id="rotate" title="Rotate view" aria-label="Rotate structure clockwise">↻</button></div>
-<div class="model-stage"><canvas id="voxel" aria-label="Isometric reconstruction of the selected proposal"></canvas><div id="footprint" aria-label="Observed top view"></div>
-<span class="stamp" id="novelty"></span></div>
-<div class="controls"><div class="pair"><label>Footprint<select id="mask" aria-label="Observed footprint"></select></label><label>Decoder<select id="method-select"></select></label></div>
-<div class="transport"><button id="play" aria-label="Play proposals">▶</button><input id="step" aria-label="Proposal number" type="range" min="1" value="1"><output id="counter"></output></div><div id="draw-info"></div></div></section></div>
-<section class="table-section"><div><p class="eyebrow">MATCHED COMPARISONS</p><h2>Performance by decoder</h2><p id="design"></p></div><div class="table-wrap"><table><thead><tr><th>Decoder</th><th>Validity</th><th>Uniqueness</th><th>Recovery</th></tr></thead><tbody id="scores"></tbody></table></div></section>
-</div>
-<section class="how" id="method"><div><p class="eyebrow">DECODING METHOD</p><h2>Remember the prefix.</h2></div><div><p>After sampling a structure, the decoder records how often each height followed each partial sequence. When the same prefix returns, it lowers the scores of frequently chosen heights. The adjustment grows with the spread of the model’s token scores.</p><p>Every occupied cell is a vertical stack of one to three cubes. This shared output constraint guarantees validity for all five controls. Recovery measures the fraction of distinct legal structures found.</p><a href="https://proceedings.mlr.press/v306/chen26bz.html">Benchmark paper ↗</a> &nbsp; <a href="https://github.com/Nek0laos/hypospace-coverage-lab#method">Experiment protocol ↗</a></div></section>
-</main><footer><span>Coverage Lab</span><span>HypoSpace · Voxel reconstruction</span></footer></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f4f3ee" />
+    <title>Coverage Lab · HypoSpace 3D</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#experiment"
+        ><span class="mark" aria-hidden="true">◈</span> Coverage Lab</a
+      >
+      <nav aria-label="Main">
+        <a href="#experiment">Experiment</a><a href="#method">Method</a>
+        <a href="talk.html">Film</a
+        ><a href="https://github.com/Nek0laos/hypospace-coverage-lab"
+          >Repository ↗</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section class="intro" id="experiment">
+        <div>
+          <p class="eyebrow">HYPOSPACE &nbsp;/&nbsp; 3D RECONSTRUCTION</p>
+          <h1>Hypothesis coverage<span>.</span></h1>
+          <p class="lede">
+            How many structures can one model recover from the same top view?
+          </p>
+        </div>
+        <div class="selector">
+          <label for="level">Occupied columns</label
+          ><select id="level" disabled></select>
+        </div>
+      </section>
+      <div id="status" role="status">Loading recorded model outputs…</div>
+      <div id="report" hidden>
+        <section class="metrics" aria-label="Selected comparison">
+          <div>
+            <p>Prefix recovery</p>
+            <strong id="recovery">—</strong>
+          </div>
+          <div>
+            <p>Model baseline</p>
+            <strong id="baseline">—</strong>
+          </div>
+          <div>
+            <p>Recovery gain</p>
+            <strong class="accent" id="gain">—</strong>
+          </div>
+          <div>
+            <p>Proposals per run</p>
+            <strong id="budget">—</strong>
+          </div>
+        </section>
+        <div class="panels">
+          <section class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">SAMPLING BUDGET</p>
+                <h2>Recovery over draws</h2>
+              </div>
+              <span class="data-label">Mean over runs</span>
+            </div>
+            <div class="chart" id="chart"></div>
+            <div
+              class="legend"
+              id="legend"
+              aria-label="Curves to display"
+            ></div>
+            <p class="panel-note" id="interval"></p>
+          </section>
+          <section class="panel voxel-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">RECORDED PROPOSALS</p>
+                <h2>Structure replay</h2>
+              </div>
+              <button
+                id="rotate"
+                title="Rotate view"
+                aria-label="Rotate structure clockwise"
+              >
+                ↻
+              </button>
+            </div>
+            <div class="model-stage">
+              <canvas
+                id="voxel"
+                aria-label="Isometric reconstruction of the selected proposal"
+              ></canvas>
+              <div id="footprint" aria-label="Observed top view"></div>
+              <span class="stamp" id="novelty"></span>
+            </div>
+            <div class="controls">
+              <div class="pair">
+                <label
+                  >Footprint<select
+                    id="mask"
+                    aria-label="Observed footprint"
+                  ></select></label
+                ><label>Decoder<select id="method-select"></select></label>
+              </div>
+              <div class="transport">
+                <button id="play" aria-label="Play proposals">▶</button
+                ><input
+                  id="step"
+                  aria-label="Proposal number"
+                  type="range"
+                  min="1"
+                  value="1"
+                /><output id="counter"></output>
+              </div>
+              <div id="draw-info"></div>
+            </div>
+          </section>
+        </div>
+        <section class="table-section">
+          <div>
+            <p class="eyebrow">MATCHED COMPARISONS</p>
+            <h2>Performance by decoder</h2>
+            <p id="design"></p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Decoder</th>
+                  <th>Validity</th>
+                  <th>Uniqueness</th>
+                  <th>Recovery</th>
+                </tr>
+              </thead>
+              <tbody id="scores"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="table-section" id="ablation" hidden>
+          <div>
+            <p class="eyebrow">ABLATION STUDY</p>
+            <h2>What drives the gain?</h2>
+            <p>
+              Each variant uses the same prefix counts. We change the model’s
+              preference among heights and the strength of the penalty.
+            </p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model preference</th>
+                  <th>Penalty scale</th>
+                  <th>Recovery</th>
+                </tr>
+              </thead>
+              <tbody id="ablation-scores"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+      <section class="how" id="method">
+        <div>
+          <p class="eyebrow">DECODING METHOD</p>
+          <h2>Remember the prefix.</h2>
+        </div>
+        <div>
+          <p>
+            After sampling a structure, the decoder records how often each
+            height followed each partial sequence. When the same prefix returns,
+            it lowers the scores of frequently chosen heights. The adjustment
+            grows with the spread of the model’s token scores.
+          </p>
+          <p>
+            Every occupied cell is a vertical stack of one to three cubes. This
+            shared output constraint guarantees validity for all five controls.
+            Recovery measures the fraction of distinct legal structures found.
+          </p>
+          <a href="https://proceedings.mlr.press/v306/chen26bz.html"
+            >Benchmark paper ↗</a
+          >
+          &nbsp;
+          <a href="https://github.com/Nek0laos/hypospace-coverage-lab#method"
+            >Experiment protocol ↗</a
+          >
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span>Coverage Lab</span>
+      <a href="talk.html">10-minute presentation →</a>
+    </footer>
+  </body>
+</html>
