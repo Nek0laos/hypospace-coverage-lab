@@ -1,0 +1,88 @@
+{
+  "upstream_url": "https://github.com/CTT-Pavilion/_HypoSpace",
+  "upstream_commit": "c69e9318577b34b5b896996571aefd4ba6053f58",
+  "verified_git_blobs": {
+    "generate_3d_dataset_complete.py": "b913792a85477290b6c9a1cbf7ba2e7f50234763",
+    "run_3d_benchmark.py": "a2c8e014d4c5498927f504f0c2dafb8f764cb72d",
+    "modules/llm_interface.py": "cc08a6e115c564d55581f9737a6fe33003f9aa43",
+    "modules/models.py": "720447230bc966d432e5976d533e3ffdda464377"
+  },
+  "grid_size": 3,
+  "max_height": 3,
+  "columns_in_row_major_order": true,
+  "by_occupied_columns": {
+    "1": {
+      "observations": 9,
+      "structures": 27
+    },
+    "2": {
+      "observations": 36,
+      "structures": 324
+    },
+    "3": {
+      "observations": 84,
+      "structures": 2268
+    }
+  },
+  "total_observations": 129,
+  "total_unique_completions_checked": 2619,
+  "checks": [
+    "serialized layers",
+    "canonical upstream hash",
+    "upstream text parser",
+    "top-view projection",
+    "gravity support",
+    "per-mask set equality"
+  ],
+  "mixed_stream_probes": 129,
+  "official_counts_per_six_attempt_probe": {
+    "n_queries": 6,
+    "n_valid": 3,
+    "n_unique": 4,
+    "n_recovered_gts": 2,
+    "parse_success_count": 5
+  },
+  "status": "passed",
+  "trace_replay": {
+    "file": "traces.jsonl.gz",
+    "sha256": "c537fa22a2235dd8064e858dd22f713a227632509cbeed8925c3918088ff2bec",
+    "trials": 12900,
+    "official_macro_means_by_method": {
+      "marginal": {
+        "trials": 2580,
+        "draws": 52380,
+        "vr": 1.0,
+        "nr": 0.5402383003158211,
+        "rr": 0.5402383003158211
+      },
+      "model": {
+        "trials": 2580,
+        "draws": 52380,
+        "vr": 1.0,
+        "nr": 0.2728107952914111,
+        "rr": 0.2728107952914111
+      },
+      "prefix": {
+        "trials": 2580,
+        "draws": 52380,
+        "vr": 1.0,
+        "nr": 0.8106660924490476,
+        "rr": 0.8106660924490476
+      },
+      "stratified": {
+        "trials": 2580,
+        "draws": 52380,
+        "vr": 1.0,
+        "nr": 0.5562159058283049,
+        "rr": 0.5562159058283049
+      },
+      "uniform": {
+        "trials": 2580,
+        "draws": 52380,
+        "vr": 1.0,
+        "nr": 0.6478179730117753,
+        "rr": 0.6478179730117753
+      }
+    }
+  }
+}
