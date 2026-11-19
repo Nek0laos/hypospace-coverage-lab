@@ -1,0 +1,15 @@
+﻿SPEAKER 3   |   The experiment   |   05:00–07:30
+录音时只读各段英文正文。标题与时间是提示，不需要读出。
+每段左侧是本人的录音时间，右侧是整部影片的时间。可打开配音台跟随逐句提示朗读。
+
+[本段 00:00  /  影片 05:00]  A budget of one draw per possible answer
+Our third section describes the paired experiment. We used Qwen two point five, three billion parameters on a server with an RTX forty eighty Super graphics card. Across three difficulty levels we evaluated all one hundred twenty-nine possible footprints with one, two, or three occupied cells. The hardest level uses 84 three-column layouts and 20 decoding seeds per layout in the hardest setting. Every method receives the same observation, the same alphabet, and the same budget of twenty-seven proposals in a hard-level run. Each proposal corresponds to a complete set of column heights. When a sampled structure repeats, it remains in the trace and counts towards that total. This lets us compare coverage at each draw as well as after the final draw.
+
+[本段 00:46  /  影片 05:46]  How much of the space was recovered?
+At the end of twenty-seven draws, unmodified model sampling recovered 19.7 percent of the valid structures on average. Prefix feedback reached 79.7 percent. That is a paired difference of 59.9 percentage points across the same layouts and seeds. The seed-panel bootstrap interval for that difference runs from 59.7 to 60.2 points, conditional on these layouts. All methods produce legal vectors here. The change in recovery therefore comes from finding different structures within the fixed number of attempts.
+
+[本段 01:21  /  影片 06:21]  Follow the discoveries through time
+The horizontal axis counts complete proposals. The vertical axis shows the mean fraction of valid structures recovered by that point. After nine draws, the baseline has recovered 13.0 percent and the prefix method has recovered 33.0 percent. At eighteen draws, the corresponding values are 17.1 and 61.0 percent. A curve starts to flatten when repeats consume more of the new draws. Comparing the curves at the same point keeps the query budget fixed.
+
+[本段 01:52  /  影片 06:52]  Which part of memory matters?
+The marginal-count variant recovers 45.8 percent on this setting. Restricting the counts to the actual path raises recovery to 79.7 percent. That gap measures the value of conditioning the feedback on earlier digits, with the model and the strength rule held fixed. The complexity-stratified decoder reaches 44.2 percent. It allocates the exact histogram of total cube counts, although layouts inside a single size group can still repeat. The easiest level reverses their order. With one occupied cell, stratification recovers every height, while prefix feedback recovers 87.8 percent.

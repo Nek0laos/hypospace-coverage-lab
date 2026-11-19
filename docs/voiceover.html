@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>四人配音台 · Coverage Lab</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="voiceover.css" />
+    <script type="module" src="voiceover.js"></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="./"
+        ><span class="mark" aria-hidden="true">◈</span> Coverage Lab</a
+      >
+      <nav aria-label="项目">
+        <a href="talk.html">示范影片</a><a href="./">实验演示</a>
+      </nav>
+    </header>
+    <main class="studio">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">HYPOSPACE / VOICE STUDIO</p>
+          <h1>四人配音台<span>.</span></h1>
+          <p class="lede">
+            每人负责 2 分 30
+            秒。跟着英文台本录音，或导入手机录音，再导出十分钟成片。
+          </p>
+        </div>
+      </section>
+      <noscript>请开启 JavaScript 以使用录音与视频合成功能。</noscript>
+      <div id="roles" aria-label="选择讲述者"></div>
+      <section class="studio-grid">
+        <article class="studio-card booth">
+          <p class="eyebrow" id="chapter-range">录制章节</p>
+          <h2 id="chapter-title">正在加载讲稿…</h2>
+          <div class="cuebox">
+            <div class="cue-meta">
+              <span id="cue-label">逐句提词</span
+              ><time id="timer">00:00 / 02:30</time>
+            </div>
+            <p id="cue" lang="en"></p>
+            <p id="next-cue" lang="en"></p>
+          </div>
+          <div class="action-row">
+            <button class="primary" id="record" disabled>开始录音</button
+            ><button id="rehearse" disabled>跟读排练</button>
+            <button id="import" disabled>导入音频</button>
+            <input
+              id="file"
+              type="file"
+              accept="audio/*,video/mp4,.m4a,.mp3,.wav,.webm,.ogg,.aac,.flac"
+              hidden
+            />
+          </div>
+          <p class="hint">
+            点击录音或排练后有 3 秒准备时间。英文提示按原片字幕切换。
+          </p>
+          <div id="take" hidden>
+            <strong id="take-name"></strong>
+            <p id="take-length"></p>
+            <audio id="audition" controls></audio>
+            <div class="action-row">
+              <a class="small-link" id="save-take" download>下载本段 WAV</a
+              ><button class="text-button" id="remove">移除本段</button>
+            </div>
+          </div>
+          <p id="status" role="status" aria-live="polite">正在读取台本…</p>
+        </article>
+        <article class="studio-card script">
+          <div class="script-head">
+            <div>
+              <p class="eyebrow">READ ALOUD</p>
+              <h2>本章英文台本</h2>
+            </div>
+            <a id="script-download" download>下载台本 TXT</a>
+          </div>
+          <div id="scenes"></div>
+        </article>
+      </section>
+      <section class="studio-card mix">
+        <div>
+          <p class="eyebrow">FINAL MIX</p>
+          <h2>合入原片</h2>
+          <p>
+            四人分开录制时，各自下载 WAV
+            发给一位组员，由该组员在同一浏览器导入四段。录音只在当前设备处理。
+          </p>
+        </div>
+        <fieldset>
+          <legend>章节时长处理</legend>
+          <label
+            ><input
+              type="radio"
+              name="fit"
+              value="pad"
+              checked
+            />保留正常语速，短录音在末尾补静音，超时录音等比例加速</label
+          >
+          <label
+            ><input type="radio" name="fit" value="stretch" />每段都均匀调速到
+            2:30，保持音高</label
+          >
+        </fieldset>
+        <p class="hint">
+          人声从 0:00、2:30、5:00、7:30
+          接入。原片字幕已经烧入画面，句内同步取决于朗读节奏。
+        </p>
+        <div class="action-row">
+          <button class="primary" id="export" disabled>合成配音视频</button
+          ><span id="ready">已就绪 0 / 4</span>
+        </div>
+        <p id="export-status" role="status" aria-live="polite"></p>
+        <div id="result" hidden>
+          <video id="preview" controls playsinline preload="metadata"></video>
+          <div class="action-row">
+            <a id="save-video" download="HypoSpace-team-voiceover.mp4"
+              >下载最终 MP4</a
+            ><a id="save-audio" download="HypoSpace-team-voiceover.m4a"
+              >下载完整音轨 M4A</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

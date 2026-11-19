@@ -1,0 +1,15 @@
+﻿SPEAKER 1   |   The benchmark   |   00:00–02:30
+录音时只读各段英文正文。标题与时间是提示，不需要读出。
+每段左侧是本人的录音时间，右侧是整部影片的时间。可打开配音台跟随逐句提示朗读。
+
+[本段 00:00  /  影片 00:00]  How many explanations can one model find?
+Look at this structure from directly above. Three squares are occupied. Can you tell which stack is tallest? You could guess, but the top view would look exactly the same if the heights changed. A language model can therefore give a perfectly defensible answer and still miss most of the possibilities. Our project asks how many different valid structures a frozen language model can discover when it has a fixed number of attempts. We test that question on the voxel reconstruction task in HypoSpace, introduced by Chen and colleagues.
+
+[本段 00:35  /  影片 00:35]  One observation, 27 possible worlds
+Start with a three by three grid. A colored square means at least one cube lies in that column. An empty square means zero. Gravity gives us a convenient description. Every occupied column is a solid stack, with no floating blocks. Read the occupied positions in row order. Each one can have height one, two, or three, independently of the others. Multiplying those choices gives twenty-seven distinct structures for this observation. Each has exactly the same footprint.
+
+[本段 01:11  /  影片 01:11]  Three ways to score a sequence
+Suppose four draws give the three stacks shown here, with the first answer occurring twice. Every proposed structure is legal. Validity is four out of four. Uniqueness counts three distinct proposals out of four attempts, so it reaches seventy-five percent. Recovery uses a different denominator. Three distinct valid structures cover only three of the twenty-seven possible structures. This example shows why we track recovery through time. The second copy consumes a draw and leaves the set of discoveries unchanged.
+
+[本段 01:48  /  影片 01:48]  Why more draws can still miss answers
+Imagine choosing among all twenty-seven answers uniformly and independently. One particular answer is missed with probability twenty-six over twenty-seven on a single draw. Raise that probability to the twenty-seventh power to miss it every time. Subtracting from one gives the expected fraction recovered, about sixty-four percent. Even this generous reference leaves many answers unseen. If the model concentrates probability on a few familiar patterns, independent draws revisit those patterns even more often. The second speaker will show how earlier proposals can change the next draw.

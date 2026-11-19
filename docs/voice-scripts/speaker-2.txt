@@ -1,0 +1,15 @@
+﻿SPEAKER 2   |   The decoder   |   02:30–05:00
+录音时只读各段英文正文。标题与时间是提示，不需要读出。
+每段左侧是本人的录音时间，右侧是整部影片的时间。可打开配音台跟随逐句提示朗读。
+
+[本段 00:00  /  影片 02:30]  A compact output space for the model
+Our decoding experiment gives every method the same compact interface. The model sees the observation and proposes one height for each occupied cell. For example, two, one, three represents a two-cube stack in the first cell, a single cube in the second, and three cubes in the last. Each chosen digit comes from the legal height alphabet. Expanding these digits into layers gives a complete structure that can be scored against the observation. This representation makes it possible to study repeated answers while holding output formatting fixed.
+
+[本段 00:37  /  影片 03:07]  A count depends on the path so far
+Consider three earlier proposals. Two of them ended in one after the prefix two, one. The third ended in three after the same prefix. If the next proposal starts with two, one, those counts tell us exactly which endings have already attracted probability. A single count per position would mix this history together with proposals that started differently. The prefix table keeps those cases separate. It is small enough to inspect, and it changes as the model draws more structures.
+
+[本段 01:08  /  影片 03:38]  Use history to rebalance the next choice
+At a decision point, we subtract a penalty from each model log probability. The penalty grows as the logarithm of one plus the visit count. Its scale depends on the gap between the model's largest and smallest height scores. That lets one previous visit counter a sharp local preference. Normalizing the adjusted scores gives a new probability distribution over the three possible heights. The decoder then samples, advances one position, and eventually records the finished proposal. Drawing a duplicate still spends one attempt. Only the proposals seen for this observation enter its history. The strategy never needs a catalog of all the answers.
+
+[本段 01:52  /  影片 04:22]  What each comparison controls
+The model-only baseline measures what the shared interface can do on its own. Complexity stratification builds on the paper's idea of distributing attention across structures of different sizes. For stacks, size is the total number of cubes. A position-only count provides a closer comparison. It can encourage every height at every position while still overlooking combinations between positions. The conditional version remembers which earlier choices led to the current position. Comparing these alternatives helps identify what information in the history actually helps.

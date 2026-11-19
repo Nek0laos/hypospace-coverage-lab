@@ -1,0 +1,706 @@
+[
+  {
+    "title": "The benchmark",
+    "zh": "问题与指标",
+    "start": 0,
+    "file": "speaker-1.txt",
+    "scenes": [
+      {
+        "at": 0,
+        "title": "How many explanations can one model find?",
+        "text": "Look at this structure from directly above. Three squares are occupied. Can you tell which stack is tallest? You could guess, but the top view would look exactly the same if the heights changed. A language model can therefore give a perfectly defensible answer and still miss most of the possibilities. Our project asks how many different valid structures a frozen language model can discover when it has a fixed number of attempts. We test that question on the voxel reconstruction task in HypoSpace, introduced by Chen and colleagues."
+      },
+      {
+        "at": 35,
+        "title": "One observation, 27 possible worlds",
+        "text": "Start with a three by three grid. A colored square means at least one cube lies in that column. An empty square means zero. Gravity gives us a convenient description. Every occupied column is a solid stack, with no floating blocks. Read the occupied positions in row order. Each one can have height one, two, or three, independently of the others. Multiplying those choices gives twenty-seven distinct structures for this observation. Each has exactly the same footprint."
+      },
+      {
+        "at": 71,
+        "title": "Three ways to score a sequence",
+        "text": "Suppose four draws give the three stacks shown here, with the first answer occurring twice. Every proposed structure is legal. Validity is four out of four. Uniqueness counts three distinct proposals out of four attempts, so it reaches seventy-five percent. Recovery uses a different denominator. Three distinct valid structures cover only three of the twenty-seven possible structures. This example shows why we track recovery through time. The second copy consumes a draw and leaves the set of discoveries unchanged."
+      },
+      {
+        "at": 108,
+        "title": "Why more draws can still miss answers",
+        "text": "Imagine choosing among all twenty-seven answers uniformly and independently. One particular answer is missed with probability twenty-six over twenty-seven on a single draw. Raise that probability to the twenty-seventh power to miss it every time. Subtracting from one gives the expected fraction recovered, about sixty-four percent. Even this generous reference leaves many answers unseen. If the model concentrates probability on a few familiar patterns, independent draws revisit those patterns even more often. The second speaker will show how earlier proposals can change the next draw."
+      }
+    ],
+    "cues": [
+      [
+        1.165,
+        3.342,
+        "Look at this structure from directly above."
+      ],
+      [
+        3.787,
+        5.755,
+        "Three squares are occupied."
+      ],
+      [
+        6.2,
+        8.032,
+        "Can you tell which stack is tallest?"
+      ],
+      [
+        8.477,
+        12.856,
+        "You could guess, but the top view would look exactly the same if the heights changed."
+      ],
+      [
+        13.301,
+        19.007,
+        "A language model can therefore give a perfectly defensible answer and still miss most of the possibilities."
+      ],
+      [
+        19.452,
+        27.274,
+        "Our project asks how many different valid structures a frozen language model can discover when it has a fixed number of attempts."
+      ],
+      [
+        27.719,
+        34.164,
+        "We test that question on the voxel reconstruction task in HypoSpace, introduced by Chen and colleagues."
+      ],
+      [
+        36.092,
+        37.777,
+        "Start with a three by three grid."
+      ],
+      [
+        38.222,
+        41.838,
+        "A colored square means at least one cube lies in that column."
+      ],
+      [
+        42.283,
+        44.287,
+        "An empty square means zero."
+      ],
+      [
+        44.732,
+        47.623,
+        "Gravity gives us a convenient description."
+      ],
+      [
+        48.068,
+        52.901,
+        "Every occupied column is a solid stack, with no floating blocks."
+      ],
+      [
+        53.346,
+        55.904,
+        "Read the occupied positions in row order."
+      ],
+      [
+        56.349,
+        61.588,
+        "Each one can have height one, two, or three, independently of the others."
+      ],
+      [
+        62.033,
+        67.617,
+        "Multiplying those choices gives twenty-seven distinct structures for this observation."
+      ],
+      [
+        68.062,
+        70.227,
+        "Each has exactly the same footprint."
+      ],
+      [
+        72.155,
+        77.603,
+        "Suppose four draws give the three stacks shown here, with the first answer occurring twice."
+      ],
+      [
+        78.048,
+        80.163,
+        "Every proposed structure is legal."
+      ],
+      [
+        80.608,
+        82.65,
+        "Validity is four out of four."
+      ],
+      [
+        83.095,
+        89.257,
+        "Uniqueness counts three distinct proposals out of four attempts, so it reaches seventy-five percent."
+      ],
+      [
+        89.702,
+        91.989,
+        "Recovery uses a different denominator."
+      ],
+      [
+        92.434,
+        98.178,
+        "Three distinct valid structures cover only three of the twenty-seven possible structures."
+      ],
+      [
+        98.623,
+        101.55,
+        "This example shows why we track recovery through time."
+      ],
+      [
+        101.995,
+        107.0,
+        "The second copy consumes a draw and leaves the set of discoveries unchanged."
+      ],
+      [
+        108.928,
+        114.217,
+        "Imagine choosing among all twenty-seven answers uniformly and independently."
+      ],
+      [
+        114.662,
+        121.279,
+        "One particular answer is missed with probability twenty-six over twenty-seven on a single draw."
+      ],
+      [
+        121.724,
+        125.499,
+        "Raise that probability to the twenty-seventh power to miss it every time."
+      ],
+      [
+        125.944,
+        131.368,
+        "Subtracting from one gives the expected fraction recovered, about sixty-four percent."
+      ],
+      [
+        131.813,
+        135.281,
+        "Even this generous reference leaves many answers unseen."
+      ],
+      [
+        135.726,
+        143.338,
+        "If the model concentrates probability on a few familiar patterns, independent draws revisit those patterns even more often."
+      ],
+      [
+        143.783,
+        148.814,
+        "The second speaker will show how earlier proposals can change the next draw."
+      ]
+    ],
+    "words": 330
+  },
+  {
+    "title": "The decoder",
+    "zh": "解码方法",
+    "start": 150,
+    "file": "speaker-2.txt",
+    "scenes": [
+      {
+        "at": 0,
+        "title": "A compact output space for the model",
+        "text": "Our decoding experiment gives every method the same compact interface. The model sees the observation and proposes one height for each occupied cell. For example, two, one, three represents a two-cube stack in the first cell, a single cube in the second, and three cubes in the last. Each chosen digit comes from the legal height alphabet. Expanding these digits into layers gives a complete structure that can be scored against the observation. This representation makes it possible to study repeated answers while holding output formatting fixed."
+      },
+      {
+        "at": 37,
+        "title": "A count depends on the path so far",
+        "text": "Consider three earlier proposals. Two of them ended in one after the prefix two, one. The third ended in three after the same prefix. If the next proposal starts with two, one, those counts tell us exactly which endings have already attracted probability. A single count per position would mix this history together with proposals that started differently. The prefix table keeps those cases separate. It is small enough to inspect, and it changes as the model draws more structures."
+      },
+      {
+        "at": 68,
+        "title": "Use history to rebalance the next choice",
+        "text": "At a decision point, we subtract a penalty from each model log probability. The penalty grows as the logarithm of one plus the visit count. Its scale depends on the gap between the model's largest and smallest height scores. That lets one previous visit counter a sharp local preference. Normalizing the adjusted scores gives a new probability distribution over the three possible heights. The decoder then samples, advances one position, and eventually records the finished proposal. Drawing a duplicate still spends one attempt. Only the proposals seen for this observation enter its history. The strategy never needs a catalog of all the answers."
+      },
+      {
+        "at": 112,
+        "title": "What each comparison controls",
+        "text": "The model-only baseline measures what the shared interface can do on its own. Complexity stratification builds on the paper's idea of distributing attention across structures of different sizes. For stacks, size is the total number of cubes. A position-only count provides a closer comparison. It can encourage every height at every position while still overlooking combinations between positions. The conditional version remembers which earlier choices led to the current position. Comparing these alternatives helps identify what information in the history actually helps."
+      }
+    ],
+    "cues": [
+      [
+        1.193,
+        5.26,
+        "Our decoding experiment gives every method the same compact interface."
+      ],
+      [
+        5.716,
+        10.084,
+        "The model sees the observation and proposes one height for each occupied cell."
+      ],
+      [
+        10.54,
+        19.066,
+        "For example, two, one, three represents a two-cube stack in the first cell, a single cube in the second, and three cubes in the last."
+      ],
+      [
+        19.522,
+        22.971,
+        "Each chosen digit comes from the legal height alphabet."
+      ],
+      [
+        23.427,
+        29.491,
+        "Expanding these digits into layers gives a complete structure that can be scored against the observation."
+      ],
+      [
+        29.946,
+        35.553,
+        "This representation makes it possible to study repeated answers while holding output formatting fixed."
+      ],
+      [
+        37.528,
+        39.617,
+        "Consider three earlier proposals."
+      ],
+      [
+        40.072,
+        42.957,
+        "Two of them ended in one after the prefix two, one."
+      ],
+      [
+        43.412,
+        46.383,
+        "The third ended in three after the same prefix."
+      ],
+      [
+        46.839,
+        53.433,
+        "If the next proposal starts with two, one, those counts tell us exactly which endings have already attracted probability."
+      ],
+      [
+        53.889,
+        59.046,
+        "A single count per position would mix this history together with proposals that started differently."
+      ],
+      [
+        59.502,
+        62.202,
+        "The prefix table keeps those cases separate."
+      ],
+      [
+        62.657,
+        67.128,
+        "It is small enough to inspect, and it changes as the model draws more structures."
+      ],
+      [
+        69.103,
+        73.677,
+        "At a decision point, we subtract a penalty from each model log probability."
+      ],
+      [
+        74.132,
+        77.844,
+        "The penalty grows as the logarithm of one plus the visit count."
+      ],
+      [
+        78.3,
+        83.068,
+        "Its scale depends on the gap between the model's largest and smallest height scores."
+      ],
+      [
+        83.524,
+        86.866,
+        "That lets one previous visit counter a sharp local preference."
+      ],
+      [
+        87.322,
+        93.64,
+        "Normalizing the adjusted scores gives a new probability distribution over the three possible heights."
+      ],
+      [
+        94.096,
+        99.797,
+        "The decoder then samples, advances one position, and eventually records the finished proposal."
+      ],
+      [
+        100.252,
+        102.885,
+        "Drawing a duplicate still spends one attempt."
+      ],
+      [
+        103.34,
+        107.03,
+        "Only the proposals seen for this observation enter its history."
+      ],
+      [
+        107.486,
+        110.742,
+        "The strategy never needs a catalog of all the answers."
+      ],
+      [
+        112.717,
+        116.558,
+        "The model-only baseline measures what the shared interface can do on its own."
+      ],
+      [
+        117.014,
+        123.989,
+        "Complexity stratification builds on the paper's idea of distributing attention across structures of different sizes."
+      ],
+      [
+        124.445,
+        127.367,
+        "For stacks, size is the total number of cubes."
+      ],
+      [
+        127.822,
+        131.026,
+        "A position-only count provides a closer comparison."
+      ],
+      [
+        131.482,
+        137.37,
+        "It can encourage every height at every position while still overlooking combinations between positions."
+      ],
+      [
+        137.825,
+        142.448,
+        "The conditional version remembers which earlier choices led to the current position."
+      ],
+      [
+        142.903,
+        148.785,
+        "Comparing these alternatives helps identify what information in the history actually helps."
+      ]
+    ],
+    "words": 352
+  },
+  {
+    "title": "The experiment",
+    "zh": "实验与结果",
+    "start": 300,
+    "file": "speaker-3.txt",
+    "scenes": [
+      {
+        "at": 0,
+        "title": "A budget of one draw per possible answer",
+        "text": "Our third section describes the paired experiment. We used Qwen two point five, three billion parameters on a server with an RTX forty eighty Super graphics card. Across three difficulty levels we evaluated all one hundred twenty-nine possible footprints with one, two, or three occupied cells. The hardest level uses 84 three-column layouts and 20 decoding seeds per layout in the hardest setting. Every method receives the same observation, the same alphabet, and the same budget of twenty-seven proposals in a hard-level run. Each proposal corresponds to a complete set of column heights. When a sampled structure repeats, it remains in the trace and counts towards that total. This lets us compare coverage at each draw as well as after the final draw."
+      },
+      {
+        "at": 46,
+        "title": "How much of the space was recovered?",
+        "text": "At the end of twenty-seven draws, unmodified model sampling recovered 19.7 percent of the valid structures on average. Prefix feedback reached 79.7 percent. That is a paired difference of 59.9 percentage points across the same layouts and seeds. The seed-panel bootstrap interval for that difference runs from 59.7 to 60.2 points, conditional on these layouts. All methods produce legal vectors here. The change in recovery therefore comes from finding different structures within the fixed number of attempts."
+      },
+      {
+        "at": 81,
+        "title": "Follow the discoveries through time",
+        "text": "The horizontal axis counts complete proposals. The vertical axis shows the mean fraction of valid structures recovered by that point. After nine draws, the baseline has recovered 13.0 percent and the prefix method has recovered 33.0 percent. At eighteen draws, the corresponding values are 17.1 and 61.0 percent. A curve starts to flatten when repeats consume more of the new draws. Comparing the curves at the same point keeps the query budget fixed."
+      },
+      {
+        "at": 112,
+        "title": "Which part of memory matters?",
+        "text": "The marginal-count variant recovers 45.8 percent on this setting. Restricting the counts to the actual path raises recovery to 79.7 percent. That gap measures the value of conditioning the feedback on earlier digits, with the model and the strength rule held fixed. The complexity-stratified decoder reaches 44.2 percent. It allocates the exact histogram of total cube counts, although layouts inside a single size group can still repeat. The easiest level reverses their order. With one occupied cell, stratification recovers every height, while prefix feedback recovers 87.8 percent."
+      }
+    ],
+    "cues": [
+      [
+        0.968,
+        3.513,
+        "Our third section describes the paired experiment."
+      ],
+      [
+        3.882,
+        10.974,
+        "We used Qwen two point five, three billion parameters on a server with an RTX forty eighty Super graphics card."
+      ],
+      [
+        11.343,
+        18.905,
+        "Across three difficulty levels we evaluated all one hundred twenty-nine possible footprints with one, two, or three occupied cells."
+      ],
+      [
+        19.275,
+        24.67,
+        "The hardest level uses 84 three-column layouts and 20 decoding seeds per layout in the hardest setting."
+      ],
+      [
+        25.039,
+        32.11,
+        "Every method receives the same observation, the same alphabet, and the same budget of twenty-seven proposals in a hard-level run."
+      ],
+      [
+        32.48,
+        35.842,
+        "Each proposal corresponds to a complete set of column heights."
+      ],
+      [
+        36.212,
+        40.687,
+        "When a sampled structure repeats, it remains in the trace and counts towards that total."
+      ],
+      [
+        41.057,
+        45.165,
+        "This lets us compare coverage at each draw as well as after the final draw."
+      ],
+      [
+        46.766,
+        54.42,
+        "At the end of twenty-seven draws, unmodified model sampling recovered 19.7 percent of the valid structures on average."
+      ],
+      [
+        54.79,
+        57.927,
+        "Prefix feedback reached 79.7 percent."
+      ],
+      [
+        58.296,
+        63.589,
+        "That is a paired difference of 59.9 percentage points across the same layouts and seeds."
+      ],
+      [
+        63.959,
+        71.96,
+        "The seed-panel bootstrap interval for that difference runs from 59.7 to 60.2 points, conditional on these layouts."
+      ],
+      [
+        72.33,
+        74.373,
+        "All methods produce legal vectors here."
+      ],
+      [
+        74.743,
+        79.893,
+        "The change in recovery therefore comes from finding different structures within the fixed number of attempts."
+      ],
+      [
+        81.495,
+        84.244,
+        "The horizontal axis counts complete proposals."
+      ],
+      [
+        84.613,
+        89.395,
+        "The vertical axis shows the mean fraction of valid structures recovered by that point."
+      ],
+      [
+        89.765,
+        97.214,
+        "After nine draws, the baseline has recovered 13.0 percent and the prefix method has recovered 33.0 percent."
+      ],
+      [
+        97.584,
+        103.337,
+        "At eighteen draws, the corresponding values are 17.1 and 61.0 percent."
+      ],
+      [
+        103.706,
+        106.986,
+        "A curve starts to flatten when repeats consume more of the new draws."
+      ],
+      [
+        107.356,
+        110.841,
+        "Comparing the curves at the same point keeps the query budget fixed."
+      ],
+      [
+        112.442,
+        116.428,
+        "The marginal-count variant recovers 45.8 percent on this setting."
+      ],
+      [
+        116.797,
+        122.346,
+        "Restricting the counts to the actual path raises recovery to 79.7 percent."
+      ],
+      [
+        122.715,
+        128.438,
+        "That gap measures the value of conditioning the feedback on earlier digits, with the model and the strength rule held fixed."
+      ],
+      [
+        128.807,
+        132.22,
+        "The complexity-stratified decoder reaches 44.2 percent."
+      ],
+      [
+        132.59,
+        139.119,
+        "It allocates the exact histogram of total cube counts, although layouts inside a single size group can still repeat."
+      ],
+      [
+        139.489,
+        142.217,
+        "The easiest level reverses their order."
+      ],
+      [
+        142.587,
+        149.014,
+        "With one occupied cell, stratification recovers every height, while prefix feedback recovers 87.8 percent."
+      ]
+    ],
+    "words": 360
+  },
+  {
+    "title": "The workbench",
+    "zh": "演示与结论",
+    "start": 450,
+    "file": "speaker-4.txt",
+    "scenes": [
+      {
+        "at": 0,
+        "title": "Debug an individual proposal",
+        "text": "In the terminal, the inspect command selects the observation, policy, and draw number. This example stops after four proposals and lists every sampled height vector in order. The recovery counter is cumulative. A line marked new adds one structure to the set. A repeated vector leaves that counter where it was. For the selected draw, the detailed trace reports the partial prefix, the original log probabilities, the visit counts, and the final sampling probabilities. That is enough information to see exactly why a previously frequent digit lost weight."
+      },
+      {
+        "at": 36,
+        "title": "Replay the same run in the browser",
+        "text": "The browser replays the archived experiment. Select a footprint to fix the observation, choose a decoder, and follow one proposal at a time. The stack diagram turns the numeric heights back into cubes, so you can see what each new vector means in three dimensions. Compare the structures with their common footprint. Their appearance from above remains the same even as the heights change. The terminal and the presentation view use the same measured run. The interactive display can run locally from the saved results."
+      },
+      {
+        "at": 69,
+        "title": "What do the model’s preferences contribute?",
+        "text": "An additional ablation changes how we interpret the gain. Give all three heights equal starting scores, while keeping the model's original score spread to calibrate the visit penalty. Recovery rises to ninety-four point four percent, above the full prefix policy's seventy-nine point seven percent. Flattening both the scores and their spread gives seventy-four point eight percent. On this task, calibration helps, and the model's height preferences can cost coverage. Validity is built into the representation, and exact enumeration is possible. Whether these effects transfer to other domains remains an open question."
+      },
+      {
+        "at": 109,
+        "title": "The experiment, from prompt to playback",
+        "text": "The project connects three pieces. A frozen model supplies local preferences. An online memory records the choices made along each sampled path. A deterministic score turns the resulting sequence into a coverage curve. You can inspect the individual draws, reproduce the comparisons, and replay the measurements in the browser using the public repository shown here. In the tested three-column setting, the prefix decoder increased mean recovery by 59.9 points over the frozen-model sampling baseline. The original benchmark and its authors' implementation are linked in the repository. Thank you for watching."
+      }
+    ],
+    "cues": [
+      [
+        1.157,
+        6.409,
+        "In the terminal, the inspect command selects the observation, policy, and draw number."
+      ],
+      [
+        6.851,
+        11.748,
+        "This example stops after four proposals and lists every sampled height vector in order."
+      ],
+      [
+        12.189,
+        14.337,
+        "The recovery counter is cumulative."
+      ],
+      [
+        14.779,
+        17.244,
+        "A line marked new adds one structure to the set."
+      ],
+      [
+        17.685,
+        20.367,
+        "A repeated vector leaves that counter where it was."
+      ],
+      [
+        20.809,
+        29.817,
+        "For the selected draw, the detailed trace reports the partial prefix, the original log probabilities, the visit counts, and the final sampling probabilities."
+      ],
+      [
+        30.259,
+        34.858,
+        "That is enough information to see exactly why a previously frequent digit lost weight."
+      ],
+      [
+        36.772,
+        39.214,
+        "The browser replays the archived experiment."
+      ],
+      [
+        39.656,
+        45.625,
+        "Select a footprint to fix the observation, choose a decoder, and follow one proposal at a time."
+      ],
+      [
+        46.067,
+        52.796,
+        "The stack diagram turns the numeric heights back into cubes, so you can see what each new vector means in three dimensions."
+      ],
+      [
+        53.237,
+        55.515,
+        "Compare the structures with their common footprint."
+      ],
+      [
+        55.957,
+        59.559,
+        "Their appearance from above remains the same even as the heights change."
+      ],
+      [
+        60.001,
+        63.42,
+        "The terminal and the presentation view use the same measured run."
+      ],
+      [
+        63.862,
+        67.341,
+        "The interactive display can run locally from the saved results."
+      ],
+      [
+        69.255,
+        72.27,
+        "An additional ablation changes how we interpret the gain."
+      ],
+      [
+        72.712,
+        79.295,
+        "Give all three heights equal starting scores, while keeping the model's original score spread to calibrate the visit penalty."
+      ],
+      [
+        79.737,
+        88.041,
+        "Recovery rises to ninety-four point four percent, above the full prefix policy's seventy-nine point seven percent."
+      ],
+      [
+        88.483,
+        93.534,
+        "Flattening both the scores and their spread gives seventy-four point eight percent."
+      ],
+      [
+        93.975,
+        98.781,
+        "On this task, calibration helps, and the model's height preferences can cost coverage."
+      ],
+      [
+        99.223,
+        103.908,
+        "Validity is built into the representation, and exact enumeration is possible."
+      ],
+      [
+        104.35,
+        108.125,
+        "Whether these effects transfer to other domains remains an open question."
+      ],
+      [
+        110.038,
+        112.075,
+        "The project connects three pieces."
+      ],
+      [
+        112.517,
+        115.166,
+        "A frozen model supplies local preferences."
+      ],
+      [
+        115.608,
+        119.662,
+        "An online memory records the choices made along each sampled path."
+      ],
+      [
+        120.103,
+        124.705,
+        "A deterministic score turns the resulting sequence into a coverage curve."
+      ],
+      [
+        125.147,
+        133.021,
+        "You can inspect the individual draws, reproduce the comparisons, and replay the measurements in the browser using the public repository shown here."
+      ],
+      [
+        133.463,
+        141.896,
+        "In the tested three-column setting, the prefix decoder increased mean recovery by 59.9 points over the frozen-model sampling baseline."
+      ],
+      [
+        142.337,
+        147.033,
+        "The original benchmark and its authors' implementation are linked in the repository."
+      ],
+      [
+        147.474,
+        148.822,
+        "Thank you for watching."
+      ]
+    ],
+    "words": 354
+  }
+]

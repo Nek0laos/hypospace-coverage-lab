@@ -4,6 +4,23 @@ At a budget of 27 proposals for 27 legal structures, Qwen2.5-3B recovered **79.6
 
 [Interactive experiment](https://nek0laos.github.io/hypospace-coverage-lab/) · [Watch the 10-minute presentation](https://nek0laos.github.io/hypospace-coverage-lab/talk.html) · [Download the presentation](https://github.com/Nek0laos/hypospace-coverage-lab/releases/tag/v1.0) · [HypoSpace paper](https://proceedings.mlr.press/v306/chen26bz.html)
 
+## 四人真人配音
+
+[打开四人配音台](https://nek0laos.github.io/hypospace-coverage-lab/voiceover.html)。每人可以用手机录音后导入，也可以在网页上跟随逐句英文提示录音。每份台本同时标出个人录音时间与影片时间。
+
+| 讲述者 | 成片时间 | 台本 |
+|---|---|---|
+| 1 · 问题与指标 | 00:00–02:30 | [英文台本 1](docs/voice-scripts/speaker-1.txt) |
+| 2 · 解码方法 | 02:30–05:00 | [英文台本 2](docs/voice-scripts/speaker-2.txt) |
+| 3 · 实验与结果 | 05:00–07:30 | [英文台本 3](docs/voice-scripts/speaker-3.txt) |
+| 4 · 演示与结论 | 07:30–10:00 | [英文台本 4](docs/voice-scripts/speaker-4.txt) |
+
+1. 选择自己的讲述者编号，点击「跟读排练」或「开始录音」。倒计时后只读英文正文。录完点击「结束并保存」，试听后下载本段 WAV。已有文件可直接选择「导入音频」。
+2. 每人的草稿保存在录制所用浏览器。分开录制时，由一名组员收齐四段录音，在同一浏览器分别放入四个讲者的位置。
+3. 默认在短录音结尾补静音，长录音保持音高加速到 2:30。也可选择将每段均匀调速至 2:30。点击「合成配音视频」可预览成片，并下载十分钟 MP4 与独立 M4A 音轨。原片中的画面和英文字幕保留，原有示范旁白由四段人声替换。
+
+音频解码、录音草稿及合成都在当前设备内处理。建议跟随页面的逐句提词控制语速，章节对齐不等于逐句自动对齐。首次合成会读取项目随附的约 31 MB 浏览器编码器和原片。也可运行 `python lab.py serve`，打开 `http://127.0.0.1:8765/voiceover.html` 在本机使用。
+
 ## Try the experiment
 
 Python 3.10+ with its standard library is sufficient for the archived experiments, debugger and dashboard. Commands below start in the repository root.

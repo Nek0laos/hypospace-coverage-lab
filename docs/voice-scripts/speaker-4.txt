@@ -1,0 +1,15 @@
+﻿SPEAKER 4   |   The workbench   |   07:30–10:00
+录音时只读各段英文正文。标题与时间是提示，不需要读出。
+每段左侧是本人的录音时间，右侧是整部影片的时间。可打开配音台跟随逐句提示朗读。
+
+[本段 00:00  /  影片 07:30]  Debug an individual proposal
+In the terminal, the inspect command selects the observation, policy, and draw number. This example stops after four proposals and lists every sampled height vector in order. The recovery counter is cumulative. A line marked new adds one structure to the set. A repeated vector leaves that counter where it was. For the selected draw, the detailed trace reports the partial prefix, the original log probabilities, the visit counts, and the final sampling probabilities. That is enough information to see exactly why a previously frequent digit lost weight.
+
+[本段 00:36  /  影片 08:06]  Replay the same run in the browser
+The browser replays the archived experiment. Select a footprint to fix the observation, choose a decoder, and follow one proposal at a time. The stack diagram turns the numeric heights back into cubes, so you can see what each new vector means in three dimensions. Compare the structures with their common footprint. Their appearance from above remains the same even as the heights change. The terminal and the presentation view use the same measured run. The interactive display can run locally from the saved results.
+
+[本段 01:09  /  影片 08:39]  What do the model’s preferences contribute?
+An additional ablation changes how we interpret the gain. Give all three heights equal starting scores, while keeping the model's original score spread to calibrate the visit penalty. Recovery rises to ninety-four point four percent, above the full prefix policy's seventy-nine point seven percent. Flattening both the scores and their spread gives seventy-four point eight percent. On this task, calibration helps, and the model's height preferences can cost coverage. Validity is built into the representation, and exact enumeration is possible. Whether these effects transfer to other domains remains an open question.
+
+[本段 01:49  /  影片 09:19]  The experiment, from prompt to playback
+The project connects three pieces. A frozen model supplies local preferences. An online memory records the choices made along each sampled path. A deterministic score turns the resulting sequence into a coverage curve. You can inspect the individual draws, reproduce the comparisons, and replay the measurements in the browser using the public repository shown here. In the tested three-column setting, the prefix decoder increased mean recovery by 59.9 points over the frozen-model sampling baseline. The original benchmark and its authors' implementation are linked in the repository. Thank you for watching.
